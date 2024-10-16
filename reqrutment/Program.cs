@@ -3,10 +3,18 @@
 List<string> chosenNames = [];
 List<string> names = []; //= ["Mike", "Bob", "Trevor", "Bruce", "Jacob", "Jakob", "Karl", "Carl", "Joe", "Jeff", "Stanley", "John", "Dwayne"];
 List<string> difNames = [];
+
+int armyCount = 3;
+
 while (true)
 {
     difNames = ["Mike", "Bob", "Trevor", "Bruce", "Jacob", "Jakob", "Karl", "Carl", "Joe", "Jeff", "Stanley", "John", "Dwayne"];
-    for (int amntSoldiers = 0; amntSoldiers < 3; amntSoldiers++)
+
+    Console.WriteLine($"How many recuits do you want to recurit to your army? (Max {Convert.ToInt32(Math.Floor(difNames.Count/2f))})");
+    string awns = Console.ReadLine();
+    int.TryParse(awns, out armyCount);
+    
+    for (int amntSoldiers = 0; amntSoldiers < armyCount; amntSoldiers++)
     {
         ahhhh(5);
         Console.ForegroundColor = ConsoleColor.Magenta;
@@ -18,24 +26,15 @@ while (true)
         }
         string choice = Console.ReadLine();
         int choiceNum = 0;
-        //Console.WriteLine("inan");
         int.TryParse(choice, out choiceNum);
-        //Console.WriteLine("efter");
         chosenNames.Add(names[choiceNum - 1]);
         difNames.Remove(names[choiceNum - 1]);
-
-        //  for(int i = 0; i < difNames.Count; i++){
-        //     Console.WriteLine(difNames[i]);
-        //  }
-        // Console.ReadLine();
-
+        Choices(chosenNames.Count, "are currently in your army", ConsoleColor.Cyan, chosenNames);
     }
     Console.ForegroundColor = ConsoleColor.Red;
     Console.WriteLine("Your opponent choses to add");
-    Console.ForegroundColor = ConsoleColor.DarkYellow;
-    ahhhh(3);
-
-    Console.WriteLine($"{names[0]}, {names[1]} and {names[2]}");
+    ahhhh(armyCount);
+    Choices(armyCount, "", ConsoleColor.DarkYellow, names);
     Console.ForegroundColor = ConsoleColor.Red;
     Console.WriteLine("to their army");
 
@@ -58,35 +57,56 @@ void ahhhh(int amt)
     }
     // Console.WriteLine(names.Count);
 }
+
+void Choices(int times, string secondPart, ConsoleColor colour, List<string> theNames){
+    string chocie = "";
+    for(int i=0; i<times;i++)
+    {
+        if(i == times-2)
+        {
+            chocie = chocie +theNames[i]+ " And ";
+        }
+        else if(i == times-1)
+        {
+            chocie = chocie +theNames[i];
+        }
+        else
+        {
+            chocie = chocie +theNames[i]+ ", ";
+        }
+        
+    }
+    Console.ForegroundColor = colour;
+    Console.WriteLine($"{chocie} {secondPart}");
+}
+
 void fight()
-{
+{   
     Console.ForegroundColor = ConsoleColor.Magenta;
     Console.WriteLine($"The Fight begins with\n");
-    Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.WriteLine($"{chosenNames[0]}, {chosenNames[1]} and {chosenNames[2]} on your side\n");
-    Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine($"{names[0]}, {names[1]} and {names[2]} on your opponents side\n\n");
+    Choices(armyCount, "on your side\n\n", ConsoleColor.Cyan, chosenNames);
+    Choices(armyCount, "on your opponents side\n\n", ConsoleColor.Red, names);
 
-    int yourSoldierCount = 3;
-    int hisCount = 3;
-    int i = 0;
+    int yourSoldierCount = armyCount;
+    int hisCount = armyCount;
     while (yourSoldierCount > 0 && hisCount > 0)
     {
         if (Random.Shared.Next(0, 2) == 1)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"Your soldier {chosenNames[i]} killed {names[i]}");
+            Console.WriteLine($"Your soldier {chosenNames[0]} killed {names[0]}");
+            names.RemoveAt(0);
             hisCount -= 1;
         }
         else
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Your opponents soldier {names[i]} killed {chosenNames[i]}");
+            Console.WriteLine($"Your opponents soldier {names[0]} killed {chosenNames[0]}");
+            chosenNames.RemoveAt(0);
             yourSoldierCount -= 1;
         }
 
         Console.ReadLine();
-        i++;
     }
     if (hisCount == 0)
     {
